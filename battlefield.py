@@ -13,8 +13,8 @@ class Battlefield:
     def run_game(self):
         self.display_welcome()
         self.battle()
-        self.dino_turn = []
-        self.robo_turn = []
+        self.dino_turn()
+        self.robo_turn()
         
 
 
