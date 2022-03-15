@@ -1,4 +1,5 @@
 
+
 from herd import Herd
 from fleet import Fleet
 
@@ -13,8 +14,12 @@ class Battlefield:
     def run_game(self):
         self.display_welcome()
         self.battle()
-        self.dino_turn()
-        self.robo_turn()
+        self.display_winner()
+        
+        
+        
+        
+    
         
 
 
@@ -28,51 +33,75 @@ class Battlefield:
 
     
     def battle(self):
-        while (self.fleet.fleet_list != [] and self.herd.herd_list != []):
-            self.chosen_dinosaur_index = self.show_dino_opponent_options
-            self.chosen_robot_index = self.show_robo_opponent_options
-            self.dino_turn(self.chosen_dinosaur_index)
-            self.robo_turn(self.chosen_robot_index)
+        while len(self.fleet.fleet_list) > 0 and  len(self.herd.herd_list) > 0:
+            if len(self.fleet.fleet_list) > 0:
+                self.robo_turn()
+            elif len(self.herd.herd_list) > 0:
+                self.dino_turn()
+            else:
+                self.display_winner()   
+
+
+            
+            
+                
+            
 
        
           
           
         
 
-    def dino_turn(self, dinosaur):
-        self.herd.herd_list [dinosaur].attack (self.fleet.fleet_list[self.chosen_robot_index])
-        if (self.fleet.fleet_list[self.chosen_robot_index].health <= 0):
-            self.fleet.fleet_list.remove(self.chosen_robot_index)
+    def dino_turn(self,):
+        self.show_dino_opponent_options()
+        chosen_dinosaur_index = int(input(f'pick a dinosaur '))
+        print('this dinosaur will attack')
+        self.show_robo_opponent_options()
+        chosen_robot_index = int(input(f'pick a robot '))
+        print('this robot will defend itself')
+        self.herd.herd_list [chosen_dinosaur_index].attack (self.fleet.fleet_list[chosen_robot_index])
+        if (self.fleet.fleet_list[chosen_robot_index].health <= 0):
+            print(f'{self.fleet.fleet_list[chosen_robot_index].name} has been defeated')
+            self.fleet.fleet_list.remove(self.fleet.fleet_list[chosen_robot_index])
             
             # remove from self.fleet.fleet_list[chosen_robo_index]
     
-    def robo_turn(self,robot):
-        self.fleet.fleet_list[robot].attack(self.herd.herd_list[self.chosen_dinosaur_index])
-        if (self.herd.herd_list[self.chosen_dinosaur_index].healh <= 0):
-            self.herd.herd_list.remove(self.chosen_dinosaur_index)
+    def robo_turn(self,):
+        self.show_robo_opponent_options()
+        chosen_robot_index = int(input(f'pick a robot '))
+        print('this robot will attack')
+        self.show_dino_opponent_options()
+        chosen_dinosaur_index = int(input(f'pick a dinosaur '))
+        print('this dinosaur will defend itself')
+        self.fleet.fleet_list[chosen_robot_index].attack(self.herd.herd_list[chosen_dinosaur_index])
+        if (self.herd.herd_list[chosen_dinosaur_index].health <= 0):
+            print(f'{self.herd.herd_list[chosen_dinosaur_index].name} has been defeated')
+            self.herd.herd_list.remove(self.herd.herd_list[chosen_dinosaur_index])
             
 
         
 
     def show_dino_opponent_options(self):
-        print(f'press 0 to select {self.herd.herd_list[0].name}')
-        print(f'press 1 to select {self.herd.herd_list[1].name}')
-        print(f'press 2 to select {self.herd.herd_list[2].name}')
-        self.chosen_dinosaur_index = input("Choose your dino: ")
-        
-
+        index = 0
+        for dinosaur in self.herd.herd_list:
+          print(f'press {index} to select {dinosaur.name}')
+          index += 1
+          
     def show_robo_opponent_options(self):
-        print(f'press 0 to select {self.fleet.fleet_list[0].name}')
-        print(f'press 1 to select {self.fleet.fleet_list[1].name}')
-        print(f'press 2 to select {self.fleet.fleet_list[2].name}')
-        self.chosen_robot_index = input('choose your robo:')
-        
-        
-
-
+        index = 0
+        for robot in self.fleet.fleet_list:
+         print(f'press {index} to select {robot.name}')
+         index += 1
+         
+         
 
     def display_winner(self):
-        pass
+        if len(self.fleet.fleet_list) > len(self.herd.herd_list):
+            print('robots win')
+        else:
+            print('dinosaurs win')    
+          
+        
 
 
 
